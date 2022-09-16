@@ -1,0 +1,27 @@
+# This is a basic workflow that is manually triggered
+
+name: Manual workflow
+
+on:
+#   workflow_dispatch:
+  push:
+#     inputs:
+#       name:
+#       description: 'Person to greet'
+#       default: 'World'
+#       required: true
+
+jobs:
+  backend:
+    runs-on: self-hosted
+    steps:
+    - name: Change Dirs
+      run: cd /home/pitch/pitch-it/backend && git pull
+    - name: Copy Files to relevant
+      run: pwd && ls && rm -rf * && cp -r /home/pitch/pitch-it/backend/* .
+    - name: maven compile
+      run: mvn compile package -DskipTests
+    - name: Run Spring JAR
+      run: nohup java -jar target/pitch-It-0.0.1-SNAPSHOT.jar&
+    - name: Check if running
+      run: lsof -ti tcp:8080
